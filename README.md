@@ -34,8 +34,8 @@ Group 6 CPE-2C
 | `x` | Unknown Variable X |
 | `y` | Unknown Variable Y (Used only in Homlinear Newton-Raphson) |
 | `e` | Euler's Constant |
-| `Pi` | PI |
-| `exp(x)` | Ex |
+| `pi` | π |
+| `exp(x)` | e^x |
 | `ln(x)` | Natural Logarithm Base E |
 | `sin(x)` | Sine Trigonometric Function |
 | `cos(x)` | Cosine Trigonometric Function |
