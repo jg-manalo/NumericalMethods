@@ -32,7 +32,7 @@ Group 6 CPE-2C
 | `/` | Division |
 | `^` | Raise to N |
 | `x` | Unknown Variable X |
-| `y` | Unknown Variable Y (Used only in Homlinear Newton-Raphson) |
+| `y` | Unknown Variable Y (Used only in Newton's Non-Linear Method) |
 | `e` | Euler's Constant |
 | `pi` | π |
 | `exp(x)` | e^x |
