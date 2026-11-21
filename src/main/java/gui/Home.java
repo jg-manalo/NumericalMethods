@@ -14,23 +14,31 @@ import javax.swing.JLabel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-
 import org.mariuszgromada.math.mxparser.License;
+
 public class Home extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private final int EXIT_SUCCESS = 1;
+	private static BackgroundMusic bgMusic;
+	private static ExitSound exitSound;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					License.iConfirmNonCommercialUse("confirm");
-					BackgroundMusic bgMusic = new BackgroundMusic();
+					bgMusic = new BackgroundMusic();
+					bgMusic.playOnLoop();
+
+		            try {
+		                exitSound = new ExitSound();
+		            } catch (Exception ex) {
+		                ex.printStackTrace();   
+		            }
 					Home frame = new Home();
 					frame.setVisible(true);
-					bgMusic.playOnLoop();
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -106,19 +114,8 @@ public class Home extends JFrame {
 		exit.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				ExitSound exitSound;
-				try {
-					exitSound = new ExitSound();
-					exitSound.play();
-				} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e1) {
-					e1.printStackTrace();
-				}
-				try {
-					Thread.sleep(2000);
-					System.exit(EXIT_SUCCESS);
-				} catch (InterruptedException e1) {
-					e1.printStackTrace();
-				}
+				
+		        closeApplication();
 			}
 		});
 		ImageIcon icon = new ImageIcon(this.getClass().getResource("/exit.png"));
@@ -131,4 +128,33 @@ public class Home extends JFrame {
 		lblNewLabel_3.setIcon(labelNewIcon_3);
 		contentPane.add(lblNewLabel_3);
 	}
+	
+	private static void closeApplication() {
+	    Runnable quit = () -> {
+	        Thread watchdog = new Thread(() -> {
+	            try {
+	                Thread.sleep(3000);
+	            } catch (InterruptedException ignored) { }
+	            Runtime.getRuntime().halt(0);
+	        });
+	        watchdog.setDaemon(true);
+	        watchdog.start();
+
+	        if (bgMusic != null) {
+	            bgMusic.stop();
+	        }
+	        for (java.awt.Window w : java.awt.Window.getWindows()) {
+	            w.dispose();
+	        }
+	        System.exit(0);
+	    };
+
+	    if (exitSound != null) {
+	        exitSound.playThen(quit);
+	    } else {
+	        quit.run();
+	    }
+	}
+	
+	
 }
