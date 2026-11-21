@@ -4,7 +4,7 @@ package gui;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
+import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -67,5 +67,20 @@ class ExitSound {
                 e.printStackTrace();
             }
         }
+    }
+    
+    public void playThen(Runnable afterSound) {
+        if (this.musicPlayer == null || !this.musicPlayer.isOpen()) {
+            afterSound.run();
+            return;
+        }
+        this.musicPlayer.addLineListener(event -> {
+            if (event.getType() == LineEvent.Type.STOP) {
+                close();
+                afterSound.run();
+            }
+        });
+        this.musicPlayer.setFramePosition(0);
+        this.musicPlayer.start();
     }
 }
