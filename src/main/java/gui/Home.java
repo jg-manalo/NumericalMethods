@@ -156,5 +156,8 @@ public class Home extends JFrame {
 	    }
 	}
 	
+	static {
+		FontLoader.register("/fonts/upheavtt.ttf");
+	}
 	
 }
